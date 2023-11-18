@@ -1,0 +1,1 @@
+manim -p -qh random_animation.py SquareToCircle
