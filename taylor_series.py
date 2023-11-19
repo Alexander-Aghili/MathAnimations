@@ -4,7 +4,7 @@ import numpy as np
 import sympy as sp
 
 # define symbolic variable t
-t = sp.symbols('t')
+t = sp.symbols('x')
 
 def differentiate(func, order):
     """
@@ -45,47 +45,54 @@ def evalAtPoint(x, func):
     return func.subs(t, x)
 
 class TaylorSeries(Scene):
-
-    def play_scene(self, obj):
+    text = None
+    grouping = None
+    
+    def play_scene(self, obj, func_latex, order):
+        latex_string = "T_{0}(x) = ".format(order)
+        self.text = MathTex(latex_string, func_latex)
+        self.text.to_edge(UP)
+        self.play(Write(self.text))
         self.play(Create(obj), run_time=3)
         self.wait(.5)
         self.play(FadeOut(obj), run_time=1)
-        self.remove()
+        self.play(FadeOut(self.text), run_time=1)
+        self.remove(obj)
 
 
     def construct(self):
-        function_np = np.arctan
-        function_sp = sp.atan(t)
+        self.text = MathTex("f(x) = sin(x)")
+        function_np = np.sin
+        function_sp = sp.sin(t)
 
         axes = Axes(
-            x_range=[-10, 10, 1],
-            y_range=[-PI/2, PI/2, 1],
+            x_range=[-2*PI, 2*PI, PI/2],
+            y_range=[-1.5, 1.5, 1],
             x_length=10,
             axis_config={"color": GREEN},
             x_axis_config={
-                "numbers_with_elongated_ticks": np.arange(0, 100, 10),
+                "numbers_with_elongated_ticks": np.arange(-2*PI, 2*PI, PI/2),
             },
             tips=False,
         )
-        axes_labels = axes.get_axis_labels()
-        sin_graph = axes.plot(lambda x: function_np(x), color=BLUE)
+        graph = axes.plot(lambda x: function_np(x), color=BLUE)
+        self.grouping = VGroup(axes, graph)
+        VGroup(self.text, self.grouping).arrange(DOWN)
 
-
-        s1 = axes.plot(lambda x: evalAtPoint(x, taylor_series(function_sp, 0, 0)), color=YELLOW)
-        s2 = axes.plot(lambda x: evalAtPoint(x, taylor_series(function_sp, 2, 0)), color=YELLOW_A)
-        s3 = axes.plot(lambda x: evalAtPoint(x, taylor_series(function_sp, 4, 0)), color=YELLOW_B)
-        s4 = axes.plot(lambda x: evalAtPoint(x, taylor_series(function_sp, 6, 0)), color=YELLOW_C)
-        s5 = axes.plot(lambda x: evalAtPoint(x, taylor_series(function_sp, 8, 0)), color=YELLOW_D)
-        
-
-        
-        labels = VGroup(axes_labels)
-
+        self.play(Write(self.text))
         self.play(Create(axes), run_time=1)
-        self.add(labels)
-        self.play(Create(sin_graph), run_time=3)
-        self.play_scene(s1)
-        self.play_scene(s2)
-        self.play_scene(s3)
-        self.play_scene(s4)
-        self.play_scene(s5)
+        self.play(Create(graph), run_time=3)
+        self.play(FadeOut(self.text))
+        point = 0
+
+        listfunc=[{"func": taylor_series(function_sp, 0, point), "color":YELLOW}, 
+                  {"func": taylor_series(function_sp, 2, point), "color":YELLOW_A},
+                  {"func": taylor_series(function_sp, 4, point), "color":YELLOW_B},
+                  {"func": taylor_series(function_sp, 6, point), "color":YELLOW_C},
+                  {"func": taylor_series(function_sp, 8, point), "color":YELLOW_D}]
+        
+        for i in range(len(listfunc)):
+            func = listfunc[i]
+            s = axes.plot(lambda x: evalAtPoint(x, func['func']), color=func['color'])
+            # VGroup(self.grouping, s)
+            self.play_scene(s, sp.latex(func['func']), i)
