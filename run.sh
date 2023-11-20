@@ -1,1 +1,1 @@
-manim -p -qh taylor_series.py TaylorSeries
+manim -p -ql taylor_series.py TaylorSeries

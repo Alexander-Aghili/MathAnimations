@@ -3,8 +3,10 @@ import math
 import numpy as np
 import sympy as sp
 
+
 # define symbolic variable t
 t = sp.symbols('x')
+
 
 def differentiate(func, order):
     """
@@ -44,6 +46,9 @@ def taylor_series(func, count, point):
 def evalAtPoint(x, func):
     return func.subs(t, x)
 
+
+#TODO:
+#Actually make taylor expansion writing look good
 class TaylorSeries(Scene):
     text = None
     grouping = None
@@ -61,17 +66,26 @@ class TaylorSeries(Scene):
 
 
     def construct(self):
-        self.text = MathTex("f(x) = sin(x)")
-        function_np = np.sin
-        function_sp = sp.sin(t)
+        xrange=[0.1, 5, 1]
+        yrange=[0, 10, 1]
+        increment=[0,1,2,3,4]
+        config = [MathTex("f(x) = \\sqrt{x}"), 
+          lambda x: math.sqrt(x), sp.sqrt(t), 1, 
+          xrange, yrange, 
+          np.arange(xrange[0], xrange[1], xrange[2])]
+
+        self.text = config[0]
+        function_np = config[1]
+        function_sp = config[2]
+        point = config[3]
 
         axes = Axes(
-            x_range=[-2*PI, 2*PI, PI/2],
-            y_range=[-1.5, 1.5, 1],
+            x_range=config[4],
+            y_range=config[5],
             x_length=10,
             axis_config={"color": GREEN},
             x_axis_config={
-                "numbers_with_elongated_ticks": np.arange(-2*PI, 2*PI, PI/2),
+                "numbers_with_elongated_ticks": config[6],
             },
             tips=False,
         )
@@ -83,16 +97,14 @@ class TaylorSeries(Scene):
         self.play(Create(axes), run_time=1)
         self.play(Create(graph), run_time=3)
         self.play(FadeOut(self.text))
-        point = 0
 
-        listfunc=[{"func": taylor_series(function_sp, 0, point), "color":YELLOW}, 
-                  {"func": taylor_series(function_sp, 2, point), "color":YELLOW_A},
-                  {"func": taylor_series(function_sp, 4, point), "color":YELLOW_B},
-                  {"func": taylor_series(function_sp, 6, point), "color":YELLOW_C},
-                  {"func": taylor_series(function_sp, 8, point), "color":YELLOW_D}]
+        listfunc=[{"func": taylor_series(function_sp, increment[0], point), "color":YELLOW}, 
+                  {"func": taylor_series(function_sp, increment[1], point), "color":YELLOW_A},
+                  {"func": taylor_series(function_sp, increment[2], point), "color":YELLOW_B},
+                  {"func": taylor_series(function_sp, increment[3], point), "color":YELLOW_C},
+                  {"func": taylor_series(function_sp, increment[4], point), "color":YELLOW_D}]
         
         for i in range(len(listfunc)):
             func = listfunc[i]
             s = axes.plot(lambda x: evalAtPoint(x, func['func']), color=func['color'])
-            # VGroup(self.grouping, s)
             self.play_scene(s, sp.latex(func['func']), i)
