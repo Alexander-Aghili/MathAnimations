@@ -1,1 +1,1 @@
-manim -p -ql taylor_series.py TaylorSeries
+manim -p -ql ./TerrainGeneration/terrain_generation.py TerrainGenerationAlgorithmVisualization
