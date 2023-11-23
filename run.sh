@@ -1,1 +1,1 @@
-manim -p -ql ./TerrainGeneration/terrain_generation.py TerrainGenerationAlgorithmVisualization
+manim -p -ql ./flowfield.py FlowField
