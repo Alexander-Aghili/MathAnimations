@@ -1,2 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/home/alexsky2/Projects/Math/Animations/media/videos/flowfield/1080p60/partial_movie_files/FlowField/3529212410_1905852801_3043079772.mp4'

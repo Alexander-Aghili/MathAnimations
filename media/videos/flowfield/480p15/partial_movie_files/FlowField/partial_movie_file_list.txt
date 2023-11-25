@@ -1,6 +1,0 @@
-# This file is used internally by FFMPEG.
-file 'file:/home/alexsky2/Projects/Math/Animations/media/videos/flowfield/480p15/partial_movie_files/FlowField/1185818338_123554531_2759896429.mp4'
-file 'file:/home/alexsky2/Projects/Math/Animations/media/videos/flowfield/480p15/partial_movie_files/FlowField/624642324_2365465173_3304267176.mp4'
-file 'file:/home/alexsky2/Projects/Math/Animations/media/videos/flowfield/480p15/partial_movie_files/FlowField/624642324_1733944848_2510373488.mp4'
-file 'file:/home/alexsky2/Projects/Math/Animations/media/videos/flowfield/480p15/partial_movie_files/FlowField/624642324_1271979861_2102454319.mp4'
-file 'file:/home/alexsky2/Projects/Math/Animations/media/videos/flowfield/480p15/partial_movie_files/FlowField/624642324_1733944848_2712537394.mp4'
